@@ -1,3 +1,18 @@
+<?php
+session_start();
+if (isset($_SESSION['login_event'])) {
+    switch ($_SESSION['login_event']) {
+        case "incorrect password":
+            echo "<H2>Неверный пароль!</H2>";
+            break;
+        case "incorrect input data":
+            echo "<H2>Неверные данные входа!</H2>";
+            break;
+    }
+    unset($_SESSION['login_event']);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
