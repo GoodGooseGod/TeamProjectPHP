@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $login = htmlspecialchars($_POST['Login']);
     $password = htmlspecialchars($_POST['Password']);
-    $_SESSION['login'] = $login;
+    setcookie('login', $login, time() + (86400 * 30), "/"); // Куки на 30 дней
 
     $file = fopen("users.txt", "r+");
     $loginexists = false;
@@ -16,48 +16,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($line[0] == $login) {
                 $loginexists = true;
                 if ($line[1] == $password . "\n") {
-                    echo "<H2>Добро пожаловать, $login!</H2>";
-                    break;
+                    header("Location: welcome.php");
+                    exit;
                 }
                 else {
-                    echo "<H1>Неверный пароль!</H1>";
-                    exit();
+                    $_SESSION["login_event"] = "incorrect password";
+                    header("Location: main.php");
+                    exit;
                 }
             }
         }
     }
     if ($login == "" | $password == "") {
-        echo  "<H1>Неверный ввод!</H1>";
-        exit();
+        $_SESSION["login_event"] = "incorrect input data";
+        header("Location: main.php");
+        exit;
     }
     if (!$loginexists) fwrite($file, $login . $separator . $password . "\n");
     fclose($file);
 
-    echo "<H2>Ваши сообщения:</H2>";
-    $file = fopen("messages.txt", "r");
-    $isthereanymessages = false;
-    while (!feof($file)) {
-        $line = fgets($file);
-        if ($line) {
-            list($from, $to, $text) = explode($separator, $line);
-            if ($to == $login) {
-                echo "<pre>    От $from: $text</pre><br>";
-                $isthereanymessages = true;
-            }
-        }
-    }
-    if  (!$isthereanymessages) echo "<pre>   Вы чмо! Вам никто не пишет!</pre><br>";
-    fclose($file);
+    header("Location: welcome.php");
+    exit;
 }
 ?>
-
-<H2>Напишите сообщение:</H2>
-<form action="sendmessage.php" method="post">
-    <label for="Name">Адресат: </label>
-    <input type="text" id="Name" name="Name">
-    <br>
-    <label for="Text">Текст сообщения: </label>
-    <input type="text" id="Text" name="Text">
-    <br>
-    <input type="submit" value="Отправить">
-</form>
