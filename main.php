@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (isset($_COOKIE['login'])) {
+    header("Location: welcome.php");
+    exit();
+}
+
 if (isset($_SESSION['login_event'])) {
     switch ($_SESSION['login_event']) {
         case "incorrect password":
