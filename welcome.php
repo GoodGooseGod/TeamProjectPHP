@@ -8,20 +8,29 @@ if (!isset($_COOKIE['login'])) {
 }
 echo "<H1>Добро пожаловать, " . $_COOKIE['login'] . "</H1>";
 echo "<H2>Ваши сообщения:</H2>";
-$file = fopen("messages.txt", "r");
+
+$db = new SQLite3('messages.db');
+if (!$db) die("Не удалось создать/открыть базу данных");
+
+$query = "CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fromwho TEXT NOT NULL,
+    towho TEXT NOT NULL,
+    text TEXT NOT NULL
+    )";
+$db->exec($query);
+
+$query = "SELECT fromwho, towho, text  FROM messages";
+$result = $db->query($query);
 $isthereanymessages = false;
-while (!feof($file)) {
-    $line = fgets($file);
-    if ($line) {
-        list($from, $to, $text) = explode($separator, $line);
-        if ($to == $_COOKIE['login']) {
-            echo "<pre>    От $from: $text</pre><br>";
-            $isthereanymessages = true;
-        }
+while($row = $result->fetchArray(SQLITE3_ASSOC)) {
+    $isthereanymessages = true;
+    if ($row["towho"] == $_COOKIE['login']) {
+        echo "<pre>    От " . $row["fromwho"] . ":" . $row["text"] . "</pre><br>";
+        $isthereanymessages = true;
     }
 }
 if  (!$isthereanymessages) echo "<pre>   Вы чмо! Вам никто не пишет!</pre><br>";
-fclose($file);
 ?>
 
 <H2>Напишите сообщение:</H2>

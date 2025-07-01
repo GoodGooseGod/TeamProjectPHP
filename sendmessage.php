@@ -6,9 +6,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $to = htmlspecialchars($_POST['Name']);
     $text = htmlspecialchars($_POST['Text']);
 
-    $file = fopen("messages.txt", "a");
-    fwrite($file, $from . $separator . $to . $separator . $text . "\n");
-    fclose($file);
+    $db = new SQLite3('messages.db');
+    if (!$db) die("Не удалось создать/открыть базу данных");
+
+    $db->exec("INSERT INTO messages (fromwho, towho, text) VALUES ('$from', '$to', '$text')");
+
+    $res = $db->query("SELECT fromwho, towho, text FROM messages");
+    while($row = $res->fetchArray(SQLITE3_ASSOC)) {
+        echo $row["fromwho"] . " " . $row["towho"] . " " . $row["text"];
+    }
 
     header("Location: welcome.php");
     exit;
