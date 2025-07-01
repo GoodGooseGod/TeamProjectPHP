@@ -4,37 +4,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     session_start();
 
     $login = htmlspecialchars($_POST['Login']);
-    $password = htmlspecialchars($_POST['Password']);
-    setcookie('login', $login, time() + (86400 * 30), "/"); // Куки на 30 дней
+    $entered_password = htmlspecialchars($_POST['Password']);
 
-    $file = fopen("users.txt", "r+");
-    $loginexists = false;
-    while (!feof($file)) {
-        $line = fgets($file);
-        if ($line) {
-            $line = explode($separator, $line);
-            if ($line[0] == $login) {
-                $loginexists = true;
-                if ($line[1] == $password . "\n") {
-                    header("Location: welcome.php");
-                    exit;
-                }
-                else {
-                    $_SESSION["login_event"] = "incorrect password";
-                    header("Location: main.php");
-                    exit;
-                }
-            }
-        }
-    }
-    if ($login == "" | $password == "") {
+    if ($login == "" | $entered_password == "") {
         $_SESSION["login_event"] = "incorrect input data";
         header("Location: main.php");
         exit;
     }
-    if (!$loginexists) fwrite($file, $login . $separator . $password . "\n");
-    fclose($file);
 
+    $db = new SQLite3('users.db');
+    if (!$db) die("Не удалось создать/открыть базу данных");
+
+    $query = "CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+    )";
+    $db->exec($query);
+
+    $query = "SELECT username, password FROM users";
+    $result = $db->query($query);
+    while($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        if ($row["username"] == $login) {
+            if ($entered_password == $row["password"]) {
+                setcookie('login', $login, time() + (86400 * 30), "/"); // Куки на 30 дней
+                header("Location: welcome.php");
+                exit;
+            } else {
+                $_SESSION["login_event"] = "incorrect password";
+                header("Location: main.php");
+                exit;
+            }
+        }
+    }
+
+    $db->exec("INSERT INTO users (username, password) VALUES ('$login', '$entered_password')");
+
+    setcookie('login', $login, time() + (86400 * 30), "/"); // Куки на 30 дней
     header("Location: welcome.php");
     exit;
 }
