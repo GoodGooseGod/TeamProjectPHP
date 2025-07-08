@@ -10,7 +10,7 @@ $token = 'Your_Token';
 try {
     $client = new Teletype\Sdk\TeletypeClient($token);
     $messages = $client->getMessages();
-    print_r($messages['data']['items'][0] ?? 'No messages');
+    print_r($messages['data']['items'] ?? 'No messages');
 } catch (Teletype\Sdk\Exceptions\TeletypeException $e) {
     echo "Error: {$e->getMessage()} (Code: {$e->getCode()})";
 }
