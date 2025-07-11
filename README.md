@@ -10,7 +10,7 @@
 
 ### Способ 1: Composer (рекомендуется)
 ```bash
-composer require your-vendor/teletype-sdk
+composer require goodgoosegod/teletypesdk
 ```
 ### Способ 2: Вручную
 ```bash
