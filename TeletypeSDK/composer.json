@@ -1,14 +1,15 @@
 {
-    "name": "GoodGooseGod/TeletypeSDK",
+    "name": "goodgoosegod/teletypesdk",
     "description": "SDK library for Teletype.app API",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Twig\\": "src/" 
+            "Twig\\": "src/"
         }
-    }
+    },
     "require": {
-    	"ext-openssl": "*"
+        "php": "^7.4",
+        "ext-openssl": "*"
     }
 }
