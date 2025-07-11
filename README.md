@@ -1,7 +1,7 @@
 # Teletype API SDK for PHP
 
 ![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-blue.svg)
-![Openssl]
+![Openssl]()
 
 Простой и удобный SDK для работы с API сервиса Teletype.app на PHP. Позволяет легко интегрировать функционал чатов и клиентской поддержки в ваше приложение.
 
