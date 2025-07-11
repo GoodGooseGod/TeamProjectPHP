@@ -11,7 +11,7 @@
 ### Способ 1: Composer (рекомендуется)
 ```bash
 composer require your-vendor/teletype-sdk
-
+```
 ### Способ 2: Вручную
 ```bash
 git clone https://github.com/your-account/teletype-sdk-php.git
