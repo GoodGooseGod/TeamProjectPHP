@@ -12,4 +12,4 @@
 git clone https://github.com/ваш-аккаунт/teletype-sdk-php.git
 cp -r teletype-sdk-php/src/ path/to/your/project/
 
-$ sin\phi = 5 $
+$$ sin\phi = 5 $$
