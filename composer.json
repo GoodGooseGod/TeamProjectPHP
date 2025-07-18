@@ -1,5 +1,6 @@
 {
     "name": "goodgoosegod/teletypesdk",
+    "version": "1.0.0",
     "description": "SDK library for Teletype.app API",
     "type": "library",
     "license": "MIT",
