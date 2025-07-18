@@ -5,11 +5,13 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Twig\\": "src/"
+            "GoodGooseGod\\TeletypeSdk\\": "src/"
         }
     },
     "require": {
-        "php": "^7.4.0",
+        "php": "^7.4|^8.0",,
         "ext-openssl": "*"
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
